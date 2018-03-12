@@ -42,6 +42,9 @@ class ModuleCommand extends AbstractCommand
         $builder->prepare($state);
         $builder->build($state);
 
+
+
+
         $writer = new ModelWriter($config);
         $writer->write($state, $output);
     }

@@ -27,8 +27,10 @@ class ControllerCommand extends AbstractCommand
 
     protected function write(State $state, InputInterface $input, OutputInterface $output)
     {
+
         $writeState = new State($this->configWriter);
         $writeState->addModel($state->getControllerModel());
+
 
         parent::write($writeState, $input, $output);
     }

@@ -50,7 +50,6 @@ class ModelWriter extends AbstractWriter
         if (!$model->getGenerator() instanceof BinGenerator) {
             $data = '<?php' . PHP_EOL . PHP_EOL . $data;
         }
-
         $this->writeData($model->getPath(), $data, $output);
     }
 

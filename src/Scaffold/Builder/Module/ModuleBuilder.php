@@ -40,11 +40,13 @@ class ModuleBuilder extends AbstractBuilder
         }
 
         $path = $pathBuilder->setModule($this->config->getModule())
+            ->addPart('src')
             ->addPart('Module')
             ->getRawPath();
 
         $model->setName($name);
         $model->setPath($path);
+
         $state->addModel($model, 'module');
     }
 

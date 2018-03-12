@@ -10,7 +10,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 class FullCommand extends AbstractCommand
 {
-
     protected function configure()
     {
         parent::configure();
@@ -21,5 +20,5 @@ class FullCommand extends AbstractCommand
         $this->addArgument('name', InputArgument::REQUIRED, 'Entity name');
         $this->addOption('rest', 'r', InputOption::VALUE_NONE, 'Generate RESTful controller');
     }
-
 }
+

@@ -76,7 +76,6 @@ class ConfigWriter extends AbstractWriter
         $config->setArrayDepth(0);
 
         $data = '<?php' . PHP_EOL . PHP_EOL . 'return ' . $config->generate() . ';';
-
         $this->writeData($this->getPath(), $data, $output);
     }
 

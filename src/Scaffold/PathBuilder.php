@@ -58,8 +58,7 @@ class PathBuilder
      */
     public function getSourcePath()
     {
-        return $this->getModuleBase() . 'src/' .
-        ucfirst($this->module) . '/' . implode("/", $this->parts) . '.php';
+        return $this->getModuleBase() . 'src/' . implode("/", $this->parts) . '.php';
     }
 
     /**

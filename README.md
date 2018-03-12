@@ -1,4 +1,4 @@
-Scaffold for Zend Framework 2 [![Build Status](https://travis-ci.org/enlitepro/zf2-scaffold.png?branch=master)](https://travis-ci.org/enlitepro/zf2-scaffold)[![Coverage Status](https://coveralls.io/repos/enlitepro/zf2-scaffold/badge.png?branch=master)](https://coveralls.io/r/enlitepro/zf2-scaffold?branch=master)
+Scaffold for Zend Framework 3 [![Build Status](https://travis-ci.org/enlitepro/zf2-scaffold.png?branch=master)](https://travis-ci.org/enlitepro/zf2-scaffold)[![Coverage Status](https://coveralls.io/repos/enlitepro/zf2-scaffold/badge.png?branch=master)](https://coveralls.io/r/enlitepro/zf2-scaffold?branch=master)
 =============================
 
 
@@ -10,7 +10,7 @@ The recommended way to install is through composer.
 ```json
 {
     "require-dev": {
-        "enlitepro/zf2-scaffold": "~1.0.0"
+        "enlitepro/zf3-scaffold": "~1.0.0"
     }
 }
 ```

@@ -67,7 +67,7 @@ class ControllerBuilder extends AbstractBuilder
         $model = $state->getControllerModel();
         $generator = new ClassGenerator($model->getName());
         $generator->setExtendedClass('AbstractActionController');
-        $generator->addUse('Zend\Mvc\Controller\AbstractActionController');
+        $generator->addUse('ZN\Mvc\Controller\AbstractActionController');
         $generator->addUse('Doctrine\ORM\EntityManager');
         $generator->addUse('Zend\Form\Form');
         $generator->addUse($state->getServiceTraitModel()->getName());

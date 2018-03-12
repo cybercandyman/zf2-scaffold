@@ -39,7 +39,7 @@ abstract class AbstractCommand extends Command
      */
     protected function configure()
     {
-        $this->addOption("bare", "b", InputOption::VALUE_NONE, 'Bare module');
+       // $this->addOption("bare", "b", InputOption::VALUE_NONE, 'Bare module');
     }
 
     /**
