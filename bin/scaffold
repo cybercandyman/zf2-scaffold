@@ -31,4 +31,5 @@ $application->add(new Console\OptionsCommand());
 $application->add(new Console\ModuleCommand());
 $application->add(new Console\ControllerCommand());
 $application->add(new Console\FullCommand());
+$application->add(new Console\FormCommand());
 $application->run();

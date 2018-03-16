@@ -13,6 +13,7 @@ use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\DocBlockGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\ValueGenerator;
 
 class FormFactoryBuilder extends AbstractBuilder
 {
@@ -65,12 +66,13 @@ class FormFactoryBuilder extends AbstractBuilder
     {
         $model = $state->getFormFactoryModel();
         $generator = new ClassGenerator($model->getName());
-        $generator->setImplementedInterfaces(['FactoryInterface']);
+
+        $generator->setImplementedInterfaces(['Zend\ServiceManager\Factory\FactoryInterface']);
 
         $generator->addUse('Doctrine\ORM\EntityManager');
         $generator->addUse('DoctrineModule\Stdlib\Hydrator\DoctrineObject');
-        $generator->addUse('Zend\ServiceManager\FactoryInterface');
-        $generator->addUse('Zend\ServiceManager\ServiceLocatorInterface');
+        $generator->addUse('Zend\ServiceManager\Factory\FactoryInterface');
+        $generator->addUse('Interop\Container\ContainerInterface');
         $generator->addUse('Zend\Form\Form');
         $generator->addUse('Zend\Form\Element');
         $generator->addUse('Zend\InputFilter\Factory');
@@ -84,11 +86,15 @@ class FormFactoryBuilder extends AbstractBuilder
 
     public function buildCreateService(ClassGenerator $generator, State $state)
     {
-        $method = new MethodGenerator('createService');
+
+        $method = new MethodGenerator('__invoke');
         $method->setDocBlock(new DocBlockGenerator());
         $method->getDocBlock()->setShortDescription('{@inheritdoc}');
-        $method->setParameter(new ParameterGenerator('serviceLocator', 'ServiceLocatorInterface'));
-
+        $method->setParameter(new ParameterGenerator('container', 'Interop\Container\ContainerInterface'));
+        $method->setParameter(new ParameterGenerator('requestedName'));
+        $options_parameter = new ParameterGenerator('options','array');
+        $options_parameter->setDefaultValue(NULL);
+        $method->setParameter($options_parameter);
         $name = lcfirst($state->getEntityModel()->getClassName());
         $entity = $state->getEntityModel()->getName();
 
@@ -103,8 +109,8 @@ class FormFactoryBuilder extends AbstractBuilder
 \$form->setInputFilter(\$this->getInputFilter());
 
 /** @var EntityManager \$entityManager */
-\$entityManager = \$serviceLocator->get('entity_manager');
-\$form->setHydrator(new DoctrineObject(\$entityManager, '$entity'));
+//\$entityManager = \$container->get('entity_manager');
+//\$form->setHydrator(new DoctrineObject(\$entityManager, '$entity'));
 
 return \$form;
 EOF
