@@ -107,10 +107,10 @@ class ServiceBuilder extends AbstractBuilder
     protected function buildConstructor(ClassGenerator $generator)
     {
         $method = new MethodGenerator('__construct');
-        $method->setParameter(new ParameterGenerator('serviceLocator', 'ServiceLocatorInterface'));
+        $method->setParameter(new ParameterGenerator('serviceLocator', 'Zend\ServiceManager\ServiceLocatorInterface'));
         $method->setDocBlock(new DocBlockGenerator());
         $method->getDocBlock()->setTag(
-            new Tag\GenericTag('param', 'ServiceLocatorInterface $serviceLocator')
+            new Tag\GenericTag('param', 'Zend\ServiceManager\ServiceLocatorInterface $serviceLocator')
         );
         $method->setBody('$this->serviceLocator = $serviceLocator;');
 
@@ -136,7 +136,7 @@ EOF;
         $method->getDocBlock()->setTag(new Tag\GenericTag('param', 'int $id'));
         $method->getDocBlock()->setTag(new Tag\GenericTag('throws', 'NotFoundException'));
         $method->getDocBlock()->setTag(
-            new Tag\GenericTag('return', $state->getEntityModel()->getClassName())
+            new Tag\GenericTag('return', $state->getEntityModel()->getName() )
         );
         $method->setBody($body);
 
@@ -153,7 +153,7 @@ EOF;
         $method->setDocBlock(new DocBlockGenerator());
         $method->getDocBlock()->setTag(new Tag\GenericTag('param', 'array $criteria'));
         $method->getDocBlock()->setTag(
-            new Tag\GenericTag('return', $state->getEntityModel()->getClassName() . '[]')
+            new Tag\GenericTag('return', $state->getEntityModel()->getName() . '[]')
         );
         $method->setBody($body);
 
@@ -165,7 +165,7 @@ EOF;
         $body = '$this->getEntityManager()->persist($model);';
 
         $method = new MethodGenerator('save');
-        $method->setParameter(new ParameterGenerator('model', $state->getEntityModel()->getClassName()));
+        $method->setParameter(new ParameterGenerator('model',$state->getEntityModel()->getName()));
         $method->setDocBlock(new DocBlockGenerator());
         $method->getDocBlock()->setTag(
             new Tag\GenericTag('param', $state->getEntityModel()->getClassName() . ' $model')
@@ -180,7 +180,8 @@ EOF;
         $body = '$this->getEntityManager()->remove($model);';
 
         $method = new MethodGenerator('delete');
-        $method->setParameter(new ParameterGenerator('model', $state->getEntityModel()->getClassName()));
+
+        $method->setParameter(new ParameterGenerator('model',  $state->getEntityModel()->getName() ));
         $method->setDocBlock(new DocBlockGenerator());
         $method->getDocBlock()->setTag(
             new Tag\GenericTag('param', $state->getEntityModel()->getClassName() . ' $model')
@@ -192,10 +193,10 @@ EOF;
 
     protected function buildEntityManager(ClassGenerator $generator)
     {
-        $setter = $this->getSetter('entityManager', 'EntityManager');
+        $setter = $this->getSetter('entityManager', 'Doctrine\ORM\EntityManager');
         $getter = $this->getLazyGetter(
             'entityManager',
-            'EntityManager',
+            'Doctrine\ORM\EntityManager',
             '$this->getServiceLocator()->get(\'entity_manager\')'
         );
 
