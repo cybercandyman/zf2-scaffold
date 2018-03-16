@@ -66,7 +66,7 @@ class ServiceTraitBuilder extends AbstractBuilder
         $generator->addUse($state->getModel('RuntimeException')->getName());
         $generator->addUse('Zend\ServiceManager\ServiceLocatorAwareInterface');
         $generator->addUse('Zend\ServiceManager\ServiceLocatorInterface');
-
+        $generator->addUse('Interop\Container\ContainerInterface');
         $property = lcfirst($state->getServiceModel()->getClassName());
         $class = $state->getServiceModel()->getClassName();
         $alias = $state->getServiceModel()->getServiceName();
@@ -74,17 +74,21 @@ class ServiceTraitBuilder extends AbstractBuilder
         $code
             = <<<EOF
 if (null === \$this->$property) {
-    if (\$this instanceof ServiceLocatorAwareInterface || method_exists(\$this, 'getServiceLocator')) {
-        \$this->$property = \$this->getServiceLocator()->get('$alias');
+    if (method_exists(\$this, 'getServiceManager') &&   \$this->getServiceManager()  instanceof ContainerInterface) {
+        if( \$this->getServiceManager()->has('\$alias') ) {
+            \$this->$property = \$this->getServiceManager()->get('$alias');
+        }else{
+            throw new RuntimeException('Service ApplicationUserService not found');
+        }        
+    } else if (property_exists(\$this, 'serviceManager')
+            && \$this->serviceManager instanceof ContainerInterface
+        ) 
+    {
+            \$this->$property = \$this->serviceManager->get('$alias');
     } else {
-        if (property_exists(\$this, 'serviceLocator')
-            && \$this->serviceLocator instanceof ServiceLocatorInterface
-        ) {
-            \$this->$property = \$this->serviceLocator->get('$alias');
-        } else {
-            throw new RuntimeException('Service locator not found');
-        }
+            throw new RuntimeException('Service manager not found');
     }
+    
 }
 return \$this->$property;
 EOF;
@@ -102,3 +106,31 @@ EOF;
         $model->setGenerator($generator);
     }
 }
+
+/**
+ *
+
+public function getUserService()
+{
+    if (null === $this->userService) {
+        if (method_exists($this, 'getServiceManager') &&  $this->getServiceManager()  instanceof ContainerInterface) {
+            if( $this->getServiceManager()->has("ApplicationUserService") ){
+                $this->userService = $this->getServiceManager()->get('ApplicationUserService');
+            }else{
+                throw new RuntimeException('Service ApplicationUserService not found');
+            }
+        }
+        else if (property_exists($this, 'serviceManager')
+            && $this->serviceManager instanceof ContainerInterface
+        ) {
+            $this->userService = $this->serviceManager->get('ApplicationUserService');
+        }
+        else {
+            throw new RuntimeException('Service manager not found');
+        }
+    }
+
+    return $this->userService;
+}
+
+*/

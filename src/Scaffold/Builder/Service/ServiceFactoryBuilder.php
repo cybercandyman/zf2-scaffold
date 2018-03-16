@@ -74,21 +74,21 @@ class ServiceFactoryBuilder extends AbstractBuilder
         $model = $this->model;
 
         $generator = new ClassGenerator($model->getName());
-        $generator->addUse('Zend\ServiceManager\FactoryInterface');
+        $generator->setImplementedInterfaces(['Zend\ServiceManager\Factory\FactoryInterface']);
+        $generator->addUse('Zend\ServiceManager\Factory\FactoryInterface');
         $generator->addUse('Zend\ServiceManager\ServiceLocatorInterface');
         $generator->addUse('Zend\ServiceManager\ServiceManager');
         $generator->addUse($state->getServiceModel()->getName());
-        $generator->setImplementedInterfaces(['FactoryInterface']);
 
-        $method = new MethodGenerator('createService');
-        $method->setParameter(new ParameterGenerator('serviceLocator', 'ServiceLocatorInterface'));
-        $method->setBody('return new ' . $state->getServiceModel()->getClassName() . '($serviceLocator);');
-
-        $doc = new DocBlockGenerator('Create service');
-        $doc->setTag(new Tag\GenericTag('param', 'ServiceLocatorInterface|ServiceManager $serviceLocator'));
-        $doc->setTag(new Tag\GenericTag('return', $state->getServiceModel()->getClassName()));
-        $method->setDocBlock($doc);
-
+        $method = new MethodGenerator('__invoke');
+        $method->setDocBlock(new DocBlockGenerator());
+        $method->getDocBlock()->setShortDescription('{@inheritdoc}');
+        $method->setParameter(new ParameterGenerator('container', '\Interop\Container\ContainerInterface'));
+        $method->setParameter(new ParameterGenerator('requestedName'));
+        $options_parameter = new ParameterGenerator('options','array');
+        $options_parameter->setDefaultValue(NULL);
+        $method->setParameter($options_parameter);
+        $method->setBody('return new ' . $state->getServiceModel()->getClassName() . '($container);');
         $generator->addMethodFromGenerator($method);
 
         $model->setGenerator($generator);

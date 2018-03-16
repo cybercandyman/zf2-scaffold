@@ -57,17 +57,13 @@ class ServiceBuilder extends AbstractBuilder
     {
         $model = $state->getServiceModel();
         $generator = new ClassGenerator($model->getName());
-
-        $generator->setImplementedInterfaces(['ServiceLocatorAwareInterface']);
-
         $generator->addUse('Doctrine\ORM\EntityManager');
         $generator->addUse($state->getEntityModel()->getName());
         $generator->addUse($state->getModel('NotFoundException')->getName());
         $generator->addUse($state->getModel('repository-trait')->getName());
-        $generator->addUse('Zend\ServiceManager\ServiceLocatorAwareInterface');
         $generator->addUse('Zend\ServiceManager\ServiceLocatorAwareTrait');
         $generator->addUse('Zend\ServiceManager\ServiceLocatorInterface');
-
+        $generator->addUse('Interop\Container\ContainerInterface');
         $generator->addTrait('ServiceLocatorAwareTrait');
         $generator->addTrait($state->getModel('repository-trait')->getClassName());
 
