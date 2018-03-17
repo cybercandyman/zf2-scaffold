@@ -61,10 +61,8 @@ class ServiceBuilder extends AbstractBuilder
         $generator->addUse($state->getEntityModel()->getName());
         $generator->addUse($state->getModel('NotFoundException')->getName());
         $generator->addUse($state->getModel('repository-trait')->getName());
-        $generator->addUse('Zend\ServiceManager\ServiceLocatorAwareTrait');
-        $generator->addUse('Zend\ServiceManager\ServiceLocatorInterface');
         $generator->addUse('Interop\Container\ContainerInterface');
-        $generator->addTrait('ServiceLocatorAwareTrait');
+
         $generator->addTrait($state->getModel('repository-trait')->getClassName());
 
         $this->addProperty($generator, 'entityManager', 'EntityManager');
@@ -103,12 +101,12 @@ class ServiceBuilder extends AbstractBuilder
     protected function buildConstructor(ClassGenerator $generator)
     {
         $method = new MethodGenerator('__construct');
-        $method->setParameter(new ParameterGenerator('serviceLocator', 'Zend\ServiceManager\ServiceLocatorInterface'));
+        $method->setParameter(new ParameterGenerator('entityManager', 'Doctrine\ORM\EntityManager'));
         $method->setDocBlock(new DocBlockGenerator());
         $method->getDocBlock()->setTag(
-            new Tag\GenericTag('param', 'Zend\ServiceManager\ServiceLocatorInterface $serviceLocator')
+            new Tag\GenericTag('param', 'Doctrine\ORM\EntityManager $entityManager')
         );
-        $method->setBody('$this->serviceLocator = $serviceLocator;');
+        $method->setBody('$this->entityManager = $entityManager;');
 
         $generator->addMethodFromGenerator($method);
     }
@@ -190,10 +188,10 @@ EOF;
     protected function buildEntityManager(ClassGenerator $generator)
     {
         $setter = $this->getSetter('entityManager', 'Doctrine\ORM\EntityManager');
-        $getter = $this->getLazyGetter(
+        $getter = $this->getGetter(
             'entityManager',
-            'Doctrine\ORM\EntityManager',
-            '$this->getServiceLocator()->get(\'entity_manager\')'
+            'Doctrine\ORM\EntityManager'
+
         );
 
         $generator->addMethodFromGenerator($setter);

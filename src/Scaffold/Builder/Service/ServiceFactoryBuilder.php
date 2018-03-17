@@ -88,7 +88,14 @@ class ServiceFactoryBuilder extends AbstractBuilder
         $options_parameter = new ParameterGenerator('options','array');
         $options_parameter->setDefaultValue(NULL);
         $method->setParameter($options_parameter);
-        $method->setBody('return new ' . $state->getServiceModel()->getClassName() . '($container);');
+        $method->setBody(
+        <<<EOF
+\$entityManager = \$container->get("doctrine.entitymanager.orm_default");  
+return new {$state->getServiceModel()->getClassName()} (\$entityManager);
+EOF
+        );
+
+       
         $generator->addMethodFromGenerator($method);
 
         $model->setGenerator($generator);
