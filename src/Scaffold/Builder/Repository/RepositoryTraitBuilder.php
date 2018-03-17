@@ -76,7 +76,7 @@ return \$this->$property;
 EOF;
 
         $this->addProperty($generator, $property, $class);
-        $this->addSetter($generator, $property, $class);
+        $this->addSetter($generator, $property, $state->getRepositoryModel()->getName());
 
         $getter = $this->getGetter($property, $class);
         $getter->setBody($code);

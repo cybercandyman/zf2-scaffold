@@ -57,7 +57,7 @@ class RepositoryBuilder extends AbstractBuilder
         $generator = new ClassGenerator($model->getName());
         $generator->addUse('Doctrine\ORM\EntityRepository');
         $generator->addUse($state->getEntityModel()->getName());
-        $generator->setExtendedClass('EntityRepository');
+        $generator->setExtendedClass('Doctrine\ORM\EntityRepository');
 
         $this->buildFactory($generator);
 
