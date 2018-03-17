@@ -74,7 +74,7 @@ class ServiceTraitBuilder extends AbstractBuilder
             = <<<EOF
 if (null === \$this->$property) {
     if (method_exists(\$this, 'getServiceManager') &&   \$this->getServiceManager()  instanceof ContainerInterface) {
-        if( \$this->getServiceManager()->has('\$alias') ) {
+        if( \$this->getServiceManager()->has('$alias') ) {
             \$this->$property = \$this->getServiceManager()->get('$alias');
         }else{
             throw new RuntimeException('Service ApplicationUserService not found');
